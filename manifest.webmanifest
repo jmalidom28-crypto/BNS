@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "BNS Nutrition Assistant",
+  "short_name": "BNS Nutrition",
+  "description": "Bilingual child growth monitoring prototype for Barangay Nutrition Scholars.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f7f4",
+  "theme_color": "#176b55",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

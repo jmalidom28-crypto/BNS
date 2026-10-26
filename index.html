@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#176b55">
+<meta name="description" content="Bilingual child growth monitoring calculator prototype for Barangay Nutrition Scholars.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>BNS Nutrition Assistant</title>
+<style>
+:root{--green:#176b55;--dark:#123d32;--bg:#f2f7f4;--card:#fff;--line:#d5e4dc;--text:#17352d;--muted:#5b7168;--yellow:#fff3cf;--yellowtext:#6e4b00;--blue:#eaf3f9}
+*{box-sizing:border-box}html{font-size:18px}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45}
+header{background:var(--green);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 18px 20px;border-radius:0 0 24px 24px}
+.headerrow{display:flex;align-items:center;gap:12px}.logo{width:52px;height:52px;flex:none}h1{font-size:1.35rem;line-height:1.2;margin:0}header p{margin:7px 0 0;color:#e2f3ec;font-size:.9rem}
+main{max-width:760px;margin:0 auto;padding:16px 13px 36px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:0 0 14px;box-shadow:0 3px 15px #153c2a0a}
+h2{font-size:1.1rem;margin:0 0 14px}.intro{color:var(--muted);font-size:.9rem;margin:-4px 0 12px}
+label{display:block;font-size:.92rem;font-weight:700;margin:13px 0 6px}input,select{width:100%;min-height:52px;border:1.5px solid #b9cec3;border-radius:12px;background:#fff;color:var(--text);font:inherit;padding:10px 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}
+button{border:0;border-radius:13px;min-height:54px;padding:12px 16px;font:inherit;font-weight:750;cursor:pointer}
+.primary{width:100%;background:var(--green);color:#fff;margin-top:18px}.secondary{background:#e4f2eb;color:var(--dark);width:100%}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e7ae36;outline-offset:2px}
+.help{font-size:.8rem;color:var(--muted);margin:7px 0 0}.result{display:none}.result.visible{display:block}.bigage{font-size:1.25rem;font-weight:800}.notice{background:var(--yellow);color:var(--yellowtext);border-radius:13px;padding:13px;font-size:.87rem;margin-top:12px}.notice strong{display:block;margin-bottom:4px}
+.indicator{border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:9px}.indname{font-weight:750}.indstatus{font-size:.88rem;color:var(--muted);margin-top:4px}
+.error{display:none;background:#fde8e6;color:#8c2e26;padding:12px;border-radius:12px;margin-top:12px}.error.visible{display:block}
+footer{font-size:.78rem;color:var(--muted);padding:0 4px 20px}.language{margin-left:auto;white-space:nowrap;background:#fff;color:var(--dark);min-height:42px;padding:7px 12px;font-size:.8rem}
+@media(max-width:390px){html{font-size:17px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.language{font-size:.74rem}}
+</style>
+</head>
+<body>
+<header>
+ <div class="headerrow">
+  <svg class="logo" viewBox="0 0 64 64" role="img" aria-label="Leaf icon"><rect width="64" height="64" rx="18" fill="#fff" opacity=".15"/><path d="M32 49V29" stroke="white" stroke-width="4" stroke-linecap="round"/><path d="M32 32C13 31 12 14 12 14s19-2 20 18" fill="#b9e6c8"/><path d="M32 27C33 9 51 10 53 10s1 19-21 25" fill="#fff"/></svg>
+  <div><h1>BNS Nutrition Assistant</h1><p>Katulong sa Pagtatasa ng Nutrisyon · Child Growth Screening</p></div>
+  <button class="language" id="langBtn" type="button" aria-label="Change language">Filipino</button>
+ </div>
+</header>
+<main>
+ <section class="card">
+  <h2 data-en="Child measurements" data-fil="Sukat ng bata">Child measurements</h2>
+  <p class="intro" data-en="Enter one child's measurements for this visit. Nothing is saved in a child database." data-fil="Ilagay ang sukat ng isang bata para sa pagbisitang ito. Hindi ise-save ang datos sa database ng mga bata.">Enter one child's measurements for this visit. Nothing is saved in a child database.</p>
+  <form id="measureForm" novalidate>
+   <div class="grid">
+    <div class="full">
+     <label for="sex" data-en="Sex of child / Kasarian" data-fil="Kasarian ng bata">Sex of child / Kasarian</label>
+     <select id="sex" required><option value="female">Girl / Babae</option><option value="male">Boy / Lalaki</option></select>
+    </div>
+    <div><label for="birth" data-en="Birthdate" data-fil="Petsa ng kapanganakan">Birthdate</label><input id="birth" type="date" required></div>
+    <div><label for="visit" data-en="Monitoring date" data-fil="Petsa ng pagtimbang">Monitoring date</label><input id="visit" type="date" required></div>
+    <div><label for="weight" data-en="Weight (kg)" data-fil="Timbang (kg)">Weight (kg)</label><input id="weight" type="number" min="0.5" max="40" step="0.01" inputmode="decimal" placeholder="e.g. 12.50" required></div>
+    <div><label for="height" data-en="Length / height (cm)" data-fil="Haba / taas (cm)">Length / height (cm)</label><input id="height" type="number" min="30" max="130" step="0.1" inputmode="decimal" placeholder="e.g. 86.5" required></div>
+    <div class="full"><label for="method" data-en="Measurement method" data-fil="Paraan ng pagsukat">Measurement method</label>
+     <select id="method"><option value="auto">Automatic by age / Awtomatiko ayon sa edad</option><option value="lying">Lying down / Nakahiga</option><option value="standing">Standing / Nakatayo</option></select>
+     <p class="help" data-en="Usually use lying length under 24 months and standing height from 24 months. Follow your official measurement training." data-fil="Karaniwang sukat na nakahiga kapag wala pang 24 buwan at nakatayo mula 24 buwan. Sundin ang opisyal na pagsasanay sa pagsukat.">Usually use lying length under 24 months and standing height from 24 months. Follow your official measurement training.</p>
+    </div>
+   </div>
+   <button class="primary" id="calculate" type="button" data-en="Calculate assessment" data-fil="Kalkulahin ang pagtatasa">Calculate assessment</button>
+   <div class="error" id="error" role="alert"></div>
+  </form>
+ </section>
+ <section class="card result" id="results" aria-live="polite">
+  <h2 data-en="Assessment result" data-fil="Resulta ng pagtatasa">Assessment result</h2>
+  <div class="bigage" id="ageResult"></div>
+  <div id="methodResult" class="help"></div>
+  <div class="indicator"><div class="indname" data-en="Weight-for-Age (WFA)" data-fil="Timbang-ayon-sa-Edad (WFA)">Weight-for-Age (WFA)</div><div class="indstatus" id="wfaResult">Not calculated</div></div>
+  <div class="indicator"><div class="indname" id="wfhTitle">Weight-for-Length/Height (WFL/WFH)</div><div class="indstatus" id="wfhResult">Not calculated</div></div>
+  <div class="indicator"><div class="indname" id="hfaTitle">Length/Height-for-Age (LFA/HFA)</div><div class="indstatus" id="hfaResult">Not calculated</div></div>
+  <div class="notice"><strong data-en="Calculation status" data-fil="Katayuan ng pagkalkula">Calculation status</strong><span data-en="Age is calculated locally. Nutritional classifications are intentionally disabled in this build until the official WHO reference dataset and Philippine OPT+ rules are integrated and validated. Do not use this prototype for actual screening or reporting." data-fil="Kinakalkula dito ang edad. Hindi pa pinapagana ang klasipikasyon ng nutrisyon hangga't hindi naidaragdag at nabeberipika ang opisyal na WHO reference data at mga tuntunin ng Philippine OPT+. Huwag gamitin ang prototype na ito sa aktuwal na screening o pag-uulat.">Age is calculated locally. Nutritional classifications are intentionally disabled in this build until the official WHO reference dataset and Philippine OPT+ rules are integrated and validated. Do not use this prototype for actual screening or reporting.</span></div>
+  <button class="secondary" id="clear" type="button" style="margin-top:14px" data-en="Clear for next child" data-fil="Burahin at magsimula sa susunod na bata">Clear for next child</button>
+ </section>
+ <section class="card">
+  <h2 data-en="Important reminder" data-fil="Mahalagang paalala">Important reminder</h2>
+  <p class="intro" data-en="This prototype stores no records. For real assessments, use approved tools until this app's z-scores and classifications have been tested against WHO Anthro and current Philippine OPT+ guidance." data-fil="Walang iniimbak na tala ang prototype na ito. Para sa aktuwal na pagtatasa, gamitin muna ang aprubadong tool hanggang masubukan ang z-scores at klasipikasyon ng app laban sa WHO Anthro at kasalukuyang gabay ng Philippine OPT+.">This prototype stores no records. For real assessments, use approved tools until this app's z-scores and classifications have been tested against WHO Anthro and current Philippine OPT+ guidance.</p>
+ </section>
+ <footer>BNS Nutrition Assistant · Prototype v0.1 · Offline-ready interface. No child details are sent to a server by this app.</footer>
+</main>
+<script src="./app.js"></script>
+</body>
+</html>
